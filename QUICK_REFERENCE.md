@@ -1,5 +1,29 @@
 # Quick Reference: LHDC PipeWire Commands
 
+## Current Default
+
+LHDC v5 is configured as the default user-level audio stack. The configuration
+survives reboot and reconnects, while the distribution-managed system files
+remain untouched.
+
+```bash
+# Check the live negotiated codec
+/path/to/lhdc-build/lhdc-control.sh --status
+
+# Open the GUI control
+/path/to/lhdc-build/lhdc-control.sh --gui
+
+# Restore the distribution PipeWire/WirePlumber stack
+/path/to/lhdc-build/lhdc-control.sh --disable
+```
+
+Expected status:
+
+```text
+Codec: lhdc v5
+Profile: a2dp-sink
+```
+
 ## 🚀 Essential Commands
 
 ### Run Custom PipeWire Tools
@@ -21,7 +45,7 @@ bash run-lhdc-env.sh ldd \
   /lhdc-install/lib/spa-0.2/bluez5/libspa-codec-bluez5-lhdc.so
 ```
 
-### Start Isolated Test
+### Start Isolated Test (advanced)
 ```bash
 CUSTOM_RUNTIME_DIR="/tmp/lhdc-pw-test-$$"
 mkdir -p "$CUSTOM_RUNTIME_DIR"
@@ -57,7 +81,10 @@ bash run-lhdc-env.sh /lhdc-install/bin/pw-cli list Profile
 
 ---
 
-## 🔄 Stop System PipeWire (Backup First!)
+## 🔄 Legacy isolated-test commands
+
+The commands below are for advanced troubleshooting only. Do not stop the
+system services for normal use; the user-level default is already configured.
 ```bash
 # Backup config
 mkdir -p ~/pipewire-backup
@@ -72,10 +99,10 @@ systemctl --user status pipewire
 
 ---
 
-## ✅ Restart System PipeWire
+## ✅ Restart the configured default stack
 ```bash
-systemctl --user start pipewire pipewire.socket
-systemctl --user status pipewire
+systemctl --user restart pipewire pipewire-pulse wireplumber
+systemctl --user is-active pipewire pipewire-pulse wireplumber
 ```
 
 ---
@@ -93,11 +120,8 @@ Environment Wrapper:    run-lhdc-env.sh
 
 ## ⚠️ Rollback (If Needed)
 ```bash
-# Restore config
-cp -r ~/pipewire-backup/.config/pipewire ~/.config/
-
-# Restart system
-systemctl --user restart pipewire pipewire.socket
+# Remove user-level overrides and return to distribution binaries
+/path/to/lhdc-build/lhdc-control.sh --disable
 ```
 
 ---

@@ -2,7 +2,8 @@
 
 ## ✅ Build Summary
 
-Your custom PipeWire with LHDC v5 codec is **fully built and installed** in your local sandbox:
+Your custom PipeWire with LHDC v5 codec is **fully built, installed, and active
+as the default user-level audio stack**:
 
 | Component | Location | Status |
 |-----------|----------|--------|
@@ -13,7 +14,25 @@ Your custom PipeWire with LHDC v5 codec is **fully built and installed** in your
 
 ---
 
-## 🧪 Phase 1: Safe Isolated Testing (No System Changes)
+## ✅ Current Default Integration
+
+The default integration uses reversible user-level systemd drop-ins. It
+survives reboot and reconnects, and browser/PulseAudio applications use the
+custom PipeWire Pulse bridge.
+
+```bash
+/path/to/lhdc-build/lhdc-control.sh --status
+/path/to/lhdc-build/lhdc-control.sh --gui
+/path/to/lhdc-build/lhdc-control.sh --disable
+```
+
+Expected codec:
+
+```text
+Codec: lhdc v5
+```
+
+## 🧪 Phase 1: Safe Isolated Testing (Historical)
 
 ### 1️⃣ Verify LHDC Codec Loads
 
@@ -66,7 +85,7 @@ rm -rf "$CUSTOM_RUNTIME_DIR"
 
 ---
 
-## 🔗 Phase 2: Integration with System Audio (Optional)
+## 🔗 Phase 2: Integration with System Audio (Historical)
 
 ### ⚠️ IMPORTANT: Backup Your System First
 
@@ -97,7 +116,11 @@ pw-custom pw-cli info core
 pw-custom pw-dump
 ```
 
-### Option B: Permanent Replacement (Advanced)
+### Option B: Permanent Replacement (Deprecated)
+
+Do not replace distribution-managed files. Use `lhdc-control.sh --enable`
+instead; it selects the custom binaries through user-level systemd overrides
+without sudo and remains reversible.
 
 If you want the system to use your custom LHDC-enabled PipeWire:
 

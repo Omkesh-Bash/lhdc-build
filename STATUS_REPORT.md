@@ -2,7 +2,23 @@
 
 **Date**: 2026-07-10  
 **System**: Linux Mint 22.3 (Ubuntu 24.04)  
-**Status**: ✅ **COMPLETE & TESTED**
+**Status**: ✅ **LHDC v5 DEFAULT & TESTED**
+
+## Current default integration
+
+The user-level systemd overrides are active. PipeWire 1.7.0, PipeWire Pulse,
+and WirePlumber 0.5.19 start automatically using `/lhdc-install`.
+The configuration persists after reboot and Buds reconnects. Verify with:
+
+```bash
+/path/to/lhdc-build/lhdc-control.sh --status
+```
+
+The distribution-managed system files remain untouched. Roll back with:
+
+```bash
+/path/to/lhdc-build/lhdc-control.sh --disable
+```
 
 ---
 
@@ -125,17 +141,17 @@ rm -rf "$CUSTOM_RUNTIME_DIR"
 
 ## 🔄 Integration Paths
 
-### Path 1: Temporary CLI Use (RECOMMENDED)
+### Path 1: User-level default (ACTIVE)
 ```bash
-alias pw-custom='bash /path/to/lhdc-build/run-lhdc-env.sh /lhdc-install/bin'
-pw-custom pw-dump  # Use custom build without affecting system
+/path/to/lhdc-build/lhdc-control.sh --status
 ```
 
-### Path 2: Full System Integration (Advanced)
-- Edit `/etc/profile.d/` to inject environment (requires sudo)
-- Stop system PipeWire service
-- Point system to custom installation
-- **Requires careful testing & backup**
+The user-level systemd drop-ins persist across reboot. Browser audio uses the
+custom PipeWire Pulse bridge, and the Buds currently negotiate LHDC v5.
+
+```bash
+/path/to/lhdc-build/lhdc-control.sh --disable
+```
 
 ### Path 3: Bluetooth-Only Override
 - Use custom build for Bluetooth device management

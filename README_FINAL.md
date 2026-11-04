@@ -1,6 +1,6 @@
 # 🎉 LHDC v5 PipeWire Build – Final Summary
 
-**Status**: ✅ **BUILD COMPLETE & VERIFIED**  
+**Status**: ✅ **LHDC v5 DEFAULT & VERIFIED**
 **Date**: July 10, 2026  
 **System**: Linux Mint 22.3 (Ubuntu 24.04)  
 **Location**: `/path/to/lhdc-build/`
@@ -9,7 +9,10 @@
 
 ## ✅ What You Now Have
 
-A **fully functional custom PipeWire build with LHDC v5 codec support**, installed to your local home directory—completely separate from your system audio.
+A **fully functional custom PipeWire build with LHDC v5 codec support**, installed to your local home directory and configured as the default user-level audio stack.
+
+The setting persists across reboot and Buds reconnects. Distribution-managed
+system files are not overwritten.
 
 ### Build Components
 - **LHDC Library**: 12 MB (`liblhdcv5.so`)
@@ -17,6 +20,32 @@ A **fully functional custom PipeWire build with LHDC v5 codec support**, install
 - **Custom PipeWire**: v1.7.0 with all tools
 - **Total Size**: ~80–120 MB (including all dependencies)
 - **System Impact**: **ZERO** (no system files modified)
+- **Browser Audio**: Compatible through the installed PipeWire Pulse bridge
+
+## Verify the default
+
+```bash
+/path/to/lhdc-build/lhdc-control.sh --status
+```
+
+Expected:
+
+```text
+Codec: lhdc v5
+Profile: a2dp-sink
+```
+
+Use the GUI:
+
+```bash
+/path/to/lhdc-build/lhdc-control.sh --gui
+```
+
+Restore the distribution stack:
+
+```bash
+/path/to/lhdc-build/lhdc-control.sh --disable
+```
 
 ---
 
@@ -249,13 +278,15 @@ You have successfully:
 3. **Protected** your system audio from any changes
 4. **Documented** the entire process for future reference
 
-**You're now ready to test LHDC Bluetooth audio on Linux Mint 22.3!**
+**LHDC Bluetooth audio is now the default and has been verified with real
+stereo playback.**
 
 ---
 
 **Questions?** See the documentation files or re-read the relevant sections of this summary.  
 **Ready to test?** Start with **Option 1** in the Quick Start section above.  
-**Want to deploy system-wide?** Read **[LHDC_TESTING_GUIDE.md](LHDC_TESTING_GUIDE.md) § Phase 2: Integration with System Audio**.
+**Verify anytime:** Run `lhdc-control.sh --status`.
+**Need the GUI?** Run `lhdc-control.sh --gui`.
 
 ---
 
@@ -263,4 +294,4 @@ You have successfully:
 **Build System**: Linux Mint 22.3 (Ubuntu 24.04), 4GB RAM  
 **PipeWire Version**: 1.7.0  
 **LHDC Support**: ✅ Enabled  
-**Status**: ✅ Ready for Testing
+**Status**: ✅ LHDC v5 Default Active

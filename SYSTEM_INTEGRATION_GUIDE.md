@@ -1,8 +1,8 @@
 # 🎵 System-Wide LHDC PipeWire – Active & Ready
 
-**Status**: ✅ **Running System-Wide**  
+**Status**: ✅ **Running as User-Level Default**
 **Date**: 2026-07-10  
-**Mode**: Temporary system integration (can rollback anytime)
+**Mode**: Reversible user-level integration (can rollback anytime)
 
 ---
 
@@ -12,9 +12,18 @@
 |-----------|--------|---------|
 | **System PipeWire** | ✅ Running | v1.7.0 with LHDC support |
 | **LHDC Codec** | ✅ Integrated | All BlueZ5 plugins loaded |
-| **Environment** | ✅ Active | `/etc/profile.d/lhdc-pipewire.sh` |
+| **Environment** | ✅ Active | `~/.config/systemd/user/*-lhdc.conf` |
 | **Bluetooth** | ✅ Ready | Powered, waiting for devices |
-| **System Files** | ✅ Backed Up | `~/pipewire-backup-system/` |
+| **System Files** | ✅ Untouched | Distribution files remain unchanged |
+
+Use the maintained control script instead of editing `/etc/profile.d` or
+replacing `/usr/bin` files:
+
+```bash
+/path/to/lhdc-build/lhdc-control.sh --enable
+/path/to/lhdc-build/lhdc-control.sh --status
+/path/to/lhdc-build/lhdc-control.sh --disable
+```
 
 ---
 

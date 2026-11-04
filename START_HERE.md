@@ -1,23 +1,29 @@
 # 📖 START HERE – LHDC PipeWire Build Guide
 
-**You have successfully built custom PipeWire with LHDC v5 codec support!**
+**LHDC v5 is installed and configured as the default user-level Bluetooth audio stack.**
+
+Current verified state:
+- Custom PipeWire 1.7.0 and WirePlumber 0.5.19 are active by default
+- realme Buds Air6 negotiate `lhdc_v5`
+- Browser/PulseAudio applications continue to work
+- The configuration persists across logout and reboot
+- Distribution-managed system files remain untouched
 
 ---
 
 ## 🎯 Choose Your Path
 
-### 🟢 **Path 1: "I want to test right now"**
+### 🟢 **Path 1: "I want to verify the current default"**
 ⏱️ **Time**: 2 minutes  
 📄 **Read**: None (just run commands)  
 👉 **Action**:
 ```bash
 cd /path/to/lhdc-build
 
-# Verify codec loads
-bash run-lhdc-env.sh ldd /lhdc-install/lib/spa-0.2/bluez5/libspa-codec-bluez5-lhdc.so
+/path/to/lhdc-build/lhdc-control.sh --status
 
-# Expected output contains:
-# liblhdcv5.so => /lhdc-install/lib/liblhdcv5.so
+# Expected output:
+# Codec: lhdc v5
 ```
 ✅ **If this works**, your build is ready!
 
@@ -59,17 +65,16 @@ bash run-lhdc-env.sh ldd /lhdc-install/lib/spa-0.2/bluez5/libspa-codec-bluez5-lh
 
 ## ⚡ One-Line Summary
 
-You have **PipeWire 1.7.0 + LHDC codec** compiled and ready in `~/lhdc-install/`, completely separate from system audio.
+You have **PipeWire 1.7.0 + LHDC v5** configured as the default user-level audio stack.
 
 ---
 
 ## 🚦 Traffic Light Guide
 
 ### 🟢 Everything Is Ready When:
-- ✅ Wrapper script (`run-lhdc-env.sh`) exists
-- ✅ LHDC codec plugin exists at `lib/spa-0.2/bluez5/libspa-codec-bluez5-lhdc.so`
-- ✅ Custom PipeWire binary exists at `bin/pipewire`
-- ✅ `ldd` shows `liblhdcv5.so` resolved correctly
+- ✅ `lhdc-control.sh --status` reports `Codec: lhdc v5`
+- ✅ `systemctl --user is-active pipewire pipewire-pulse wireplumber` reports active
+- ✅ Browser audio uses the Buds normally
 
 **Current Status**: ✅ All green!
 
@@ -85,7 +90,7 @@ You have **PipeWire 1.7.0 + LHDC codec** compiled and ready in `~/lhdc-install/`
 ### Why should I care?
 - LHDC is a high-quality Bluetooth audio codec
 - Enables better audio on compatible Bluetooth devices (Sony, etc.)
-- System audio remains untouched (can rollback anytime)
+- User-level service overrides select the custom stack (distribution files remain untouched)
 
 ### How do I use it?
 ```bash
@@ -117,8 +122,11 @@ bash run-lhdc-env.sh /lhdc-install/bin/pw-top
 **Q: How do I test this?**  
 A: Run Path 1 above (2 minutes) or see "Quick Start" in [README_FINAL.md](README_FINAL.md)
 
-**Q: Will this affect my system audio?**  
-A: No. Everything is in `~/lhdc-install`. System untouched.
+**Q: Will this remain enabled after reboot?**
+A: Yes. User-level systemd drop-ins remain installed and services start the custom stack after login.
+
+**Q: How do I restore the distribution audio stack?**
+A: Run `./lhdc-control.sh --disable`.
 
 **Q: How do I use this with my Bluetooth device?**  
 A: See [LHDC_TESTING_GUIDE.md](LHDC_TESTING_GUIDE.md) § Phase 2
@@ -166,7 +174,7 @@ bash run-lhdc-env.sh /lhdc-install/bin/pipewire --version
 
 ## 🎉 You're All Set!
 
-**Status**: ✅ Build complete  
+**Status**: ✅ LHDC v5 default active
 **System Safety**: ✅ 100% protected  
 **Ready to Test**: ✅ Yes  
 
