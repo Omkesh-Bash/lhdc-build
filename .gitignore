@@ -1,0 +1,15 @@
+# Nested upstream/component repositories are tracked independently.
+/pipewire/
+/wireplumber/
+/liblhdcv3/
+/liblhdcv5/
+
+# Local build/install/runtime output.
+/build/
+/out/
+/install/
+*.o
+*.so
+*.so.*
+*.a
+/logs/
