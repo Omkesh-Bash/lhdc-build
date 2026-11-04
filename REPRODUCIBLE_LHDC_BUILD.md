@@ -50,6 +50,7 @@ lhdc-build/
 ├── liblhdcv5/     # LHDC v5 encoder source
 ├── run-lhdc-env.sh
 ├── lhdc-status.sh
+├── lhdc-control.sh
 └── connect-headphones.sh
 ```
 
@@ -323,11 +324,46 @@ Finished:
 Not finished:
 
 - A standard desktop mixer codec dropdown
-- Automatic permanent system integration
 - Proof that these Buds select LHDC v3
 - Native multichannel Bluetooth surround
 
-The recommended next engineering step is a user-level launcher that performs
-the socket-safe service handoff and provides SBC fallback if LHDC negotiation
-fails. Do not replace the distribution PipeWire installation until that
-launcher has been tested through reconnects, suspend/resume, and fallback.
+## Reversible user-level default integration
+
+The recommended default integration does not replace distribution files. It
+adds systemd user drop-ins under `~/.config/systemd/user/` that point the
+existing user services at the custom PipeWire 1.7.0 and WirePlumber 0.5.19
+installation. Distribution packages remain available for rollback and updates.
+
+Enable it:
+
+```bash
+./lhdc-control.sh --enable
+```
+
+Inspect the live codec:
+
+```bash
+./lhdc-control.sh --status
+```
+
+Restore the distribution PipeWire/WirePlumber binaries:
+
+```bash
+./lhdc-control.sh --disable
+```
+
+The optional GUI can be started with:
+
+```bash
+./lhdc-control.sh --gui
+```
+
+Install `lhdc-control.desktop` into
+`~/.local/share/applications/` to make it searchable from the desktop
+application menu. The GUI can enable LHDC, show the live codec, or restore
+system audio. Codec selection is still negotiated automatically; reconnecting
+the Buds may be required after changing modes.
+
+The custom WirePlumber configuration advertises LHDC first and retains SBC as
+a fallback. If the Buds reject LHDC, the Bluetooth profile can still negotiate
+SBC without changing the service configuration.

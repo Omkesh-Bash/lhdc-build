@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=LHDC Audio Control
+Comment=Enable LHDC audio and inspect the negotiated Bluetooth codec
+Exec=/path/to/lhdc-build/lhdc-control.sh --gui
+Terminal=false
+Categories=AudioVideo;Audio;
