@@ -12,7 +12,7 @@ These are the versions used by the current working setup:
 | System WirePlumber baseline | 0.4.17 |
 | BlueZ | 5.72 |
 | Linux kernel | 6.8.0-147-generic |
-| Bluetooth adapter | Intel AX201 |
+| Bluetooth adapter | your Bluetooth adapter |
 | Verified codec | LHDC v5 (`lhdc_v5`) |
 | LHDC v3 codec ID | `0x4c33` |
 | LHDC v5 codec ID | `0x4c35` |
@@ -20,9 +20,9 @@ These are the versions used by the current working setup:
 Verify custom versions with the runtime environment:
 
 ```bash
-cd /path/to/lhdc-build
-./run-lhdc-env.sh /lhdc-install/bin/pipewire --version
-./run-lhdc-env.sh /lhdc-install/bin/wireplumber --version
+cd $HOME/lhdc-build
+./run-lhdc-env.sh $HOME/lhdc-install/bin/pipewire --version
+./run-lhdc-env.sh $HOME/lhdc-install/bin/wireplumber --version
 ```
 
 Calling the custom binaries directly without the environment wrapper can
@@ -34,7 +34,7 @@ not just a convenience.
 The custom prefix is:
 
 ```text
-/lhdc-install
+$HOME/lhdc-install
 ```
 
 Important installed files:
@@ -94,17 +94,17 @@ WIREPLUMBER_DATA_DIR=$PREFIX/share/wireplumber
 Reinstall/update the custom prefix, then restart:
 
 ```bash
-/path/to/lhdc-build/lhdc-control.sh --enable
+$HOME/lhdc-build/lhdc-control.sh --enable
 ```
 
 Restore distribution-managed PipeWire and WirePlumber:
 
 ```bash
-/path/to/lhdc-build/lhdc-control.sh --disable
+$HOME/lhdc-build/lhdc-control.sh --disable
 ```
 
 Check the result:
 
 ```bash
-/path/to/lhdc-build/lhdc-control.sh --status
+$HOME/lhdc-build/lhdc-control.sh --status
 ```

@@ -20,9 +20,9 @@ Use the maintained control script instead of editing `/etc/profile.d` or
 replacing `/usr/bin` files:
 
 ```bash
-/path/to/lhdc-build/lhdc-control.sh --enable
-/path/to/lhdc-build/lhdc-control.sh --status
-/path/to/lhdc-build/lhdc-control.sh --disable
+$HOME/lhdc-build/lhdc-control.sh --enable
+$HOME/lhdc-build/lhdc-control.sh --status
+$HOME/lhdc-build/lhdc-control.sh --disable
 ```
 
 ---

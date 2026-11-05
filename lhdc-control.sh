@@ -3,7 +3,7 @@ set -euo pipefail
 
 ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 USER_SYSTEMD="$HOME/.config/systemd/user"
-DEVICE_ADDRESS="${LHDC_DEVICE_ADDRESS:-AA:BB:CC:DD:EE:FF}"
+DEVICE_ADDRESS="${LHDC_DEVICE_ADDRESS:-}"
 
 install_overrides() {
   mkdir -p \
@@ -21,9 +21,13 @@ install_overrides() {
 enable_lhdc() {
   install_overrides
   systemctl --user daemon-reload
-  bluetoothctl disconnect "$DEVICE_ADDRESS" >/dev/null 2>&1 || true
+  if [[ -n "$DEVICE_ADDRESS" ]]; then
+    bluetoothctl disconnect "$DEVICE_ADDRESS" >/dev/null 2>&1 || true
+  fi
   systemctl --user restart pipewire pipewire-pulse wireplumber
-  bluetoothctl connect "$DEVICE_ADDRESS" >/dev/null 2>&1 || true
+  if [[ -n "$DEVICE_ADDRESS" ]]; then
+    bluetoothctl connect "$DEVICE_ADDRESS" >/dev/null 2>&1 || true
+  fi
   sleep 5
   "$ROOT/lhdc-status.sh" || true
 }

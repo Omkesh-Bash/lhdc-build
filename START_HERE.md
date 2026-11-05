@@ -18,9 +18,9 @@ Current verified state:
 📄 **Read**: None (just run commands)  
 👉 **Action**:
 ```bash
-cd /path/to/lhdc-build
+cd $HOME/lhdc-build
 
-/path/to/lhdc-build/lhdc-control.sh --status
+$HOME/lhdc-build/lhdc-control.sh --status
 
 # Expected output:
 # Codec: lhdc v5
@@ -95,12 +95,12 @@ You have **PipeWire 1.7.0 + LHDC v5** configured as the default user-level audio
 ### How do I use it?
 ```bash
 # Always use the wrapper script:
-bash run-lhdc-env.sh /lhdc-install/bin/<command>
+bash run-lhdc-env.sh $HOME/lhdc-install/bin/<command>
 
 # Examples:
-bash run-lhdc-env.sh /lhdc-install/bin/pw-cli info core
-bash run-lhdc-env.sh /lhdc-install/bin/pw-dump
-bash run-lhdc-env.sh /lhdc-install/bin/pw-top
+bash run-lhdc-env.sh $HOME/lhdc-install/bin/pw-cli info core
+bash run-lhdc-env.sh $HOME/lhdc-install/bin/pw-dump
+bash run-lhdc-env.sh $HOME/lhdc-install/bin/pw-top
 ```
 
 ### Is my system safe?
@@ -143,8 +143,8 @@ A: See [LHDC_TESTING_GUIDE.md](LHDC_TESTING_GUIDE.md) § Rollback Instructions (
 
 ### Do This:
 ```bash
-cd /path/to/lhdc-build
-bash run-lhdc-env.sh /lhdc-install/bin/pipewire --version
+cd $HOME/lhdc-build
+bash run-lhdc-env.sh $HOME/lhdc-install/bin/pipewire --version
 # Should print: Compiled with libpipewire 1.7.0
 ```
 

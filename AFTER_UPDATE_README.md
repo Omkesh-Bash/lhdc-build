@@ -3,6 +3,9 @@
 This guide explains what to check after updating Linux, Bluetooth, PipeWire,
 WirePlumber, or the project repositories.
 
+This is a small side-project guide, not a full product or support promise.
+Adapt the placeholders for your own device and installation path.
+
 ## Current setup
 
 - LHDC v5 is the active codec when the Buds are connected.
@@ -15,7 +18,7 @@ WirePlumber, or the project repositories.
 Verify the live negotiated codec:
 
 ```bash
-/path/to/lhdc-build/lhdc-control.sh --status
+$HOME/lhdc-build/lhdc-control.sh --status
 ```
 
 Expected output includes:
@@ -28,7 +31,7 @@ Profile: a2dp-sink
 The GUI control is available with:
 
 ```bash
-/path/to/lhdc-build/lhdc-control.sh --gui
+$HOME/lhdc-build/lhdc-control.sh --gui
 ```
 
 ## Before system updates
@@ -44,22 +47,22 @@ Before a major update, record the current state:
 
 ```bash
 systemctl --user is-active pipewire pipewire-pulse wireplumber
-/path/to/lhdc-build/lhdc-control.sh --status
+$HOME/lhdc-build/lhdc-control.sh --status
 ```
 
 If troubleshooting is needed, temporarily restore the distribution audio
 stack:
 
 ```bash
-/path/to/lhdc-build/lhdc-control.sh --disable
+$HOME/lhdc-build/lhdc-control.sh --disable
 systemctl --user restart pipewire pipewire-pulse wireplumber
 ```
 
 After updating, re-enable and verify:
 
 ```bash
-/path/to/lhdc-build/lhdc-control.sh --enable
-/path/to/lhdc-build/lhdc-control.sh --status
+$HOME/lhdc-build/lhdc-control.sh --enable
+$HOME/lhdc-build/lhdc-control.sh --status
 ```
 
 If the custom stack stops working after an update, use `--disable` first.

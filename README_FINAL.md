@@ -3,7 +3,7 @@
 **Status**: ✅ **LHDC v5 DEFAULT & VERIFIED**
 **Date**: July 10, 2026  
 **System**: Linux Mint 22.3 (Ubuntu 24.04)  
-**Location**: `/path/to/lhdc-build/`
+**Location**: `$HOME/lhdc-build/`
 
 ---
 
@@ -25,7 +25,7 @@ system files are not overwritten.
 ## Verify the default
 
 ```bash
-/path/to/lhdc-build/lhdc-control.sh --status
+$HOME/lhdc-build/lhdc-control.sh --status
 ```
 
 Expected:
@@ -38,13 +38,13 @@ Profile: a2dp-sink
 Use the GUI:
 
 ```bash
-/path/to/lhdc-build/lhdc-control.sh --gui
+$HOME/lhdc-build/lhdc-control.sh --gui
 ```
 
 Restore the distribution stack:
 
 ```bash
-/path/to/lhdc-build/lhdc-control.sh --disable
+$HOME/lhdc-build/lhdc-control.sh --disable
 ```
 
 ---
@@ -64,11 +64,11 @@ Restore the distribution stack:
 
 ### Option 1: Verify Codec Loads (30 seconds)
 ```bash
-cd /path/to/lhdc-build
-bash run-lhdc-env.sh ldd /lhdc-install/lib/spa-0.2/bluez5/libspa-codec-bluez5-lhdc.so
+cd $HOME/lhdc-build
+bash run-lhdc-env.sh ldd $HOME/lhdc-install/lib/spa-0.2/bluez5/libspa-codec-bluez5-lhdc.so
 ```
 
-**Expected**: Shows `liblhdcv5.so => /lhdc-install/lib/liblhdcv5.so`
+**Expected**: Shows `liblhdcv5.so => $HOME/lhdc-install/lib/liblhdcv5.so`
 
 ### Option 2: Start Custom PipeWire Isolated (2 minutes)
 ```bash
@@ -78,12 +78,12 @@ mkdir -p "$CUSTOM_RUNTIME_DIR"
 export XDG_RUNTIME_DIR="$CUSTOM_RUNTIME_DIR"
 
 # Start custom PipeWire
-cd /path/to/lhdc-build
-bash run-lhdc-env.sh /lhdc-install/bin/pipewire &
+cd $HOME/lhdc-build
+bash run-lhdc-env.sh $HOME/lhdc-install/bin/pipewire &
 sleep 2
 
 # Check status
-bash run-lhdc-env.sh /lhdc-install/bin/pw-cli info core
+bash run-lhdc-env.sh $HOME/lhdc-install/bin/pw-cli info core
 
 # Stop test
 kill %1
@@ -118,7 +118,7 @@ systemctl --user restart pipewire  # Uses system PipeWire again
 ```bash
 git clone https://github.com/PipeWire/pipewire.git
 ```
-(Now cloned to `/path/to/lhdc-build/pipewire/`)
+(Now cloned to `$HOME/lhdc-build/pipewire/`)
 
 ### ✅ Q2: Meson Setup with LHDC
 ```bash
@@ -185,8 +185,8 @@ bash run-lhdc-env.sh <command>
 ### Issue: "cannot open shared object file"
 ```bash
 # Make sure you use the wrapper:
-✅ bash run-lhdc-env.sh /lhdc-install/bin/pw-cli
-❌ /lhdc-install/bin/pw-cli
+✅ bash run-lhdc-env.sh $HOME/lhdc-install/bin/pw-cli
+❌ $HOME/lhdc-install/bin/pw-cli
 ```
 
 ### Issue: PipeWire won't start
@@ -217,7 +217,7 @@ For more issues, see **[LHDC_TESTING_GUIDE.md](LHDC_TESTING_GUIDE.md) § Trouble
 
 ### Installation
 ```
-/lhdc-install/
+$HOME/lhdc-install/
 ├── bin/pipewire                    # Custom PipeWire daemon
 ├── lib/liblhdcv5.so                # LHDC library
 ├── lib/spa-0.2/bluez5/libspa-codec-bluez5-lhdc.so  # ⭐ CODEC PLUGIN
@@ -227,7 +227,7 @@ For more issues, see **[LHDC_TESTING_GUIDE.md](LHDC_TESTING_GUIDE.md) § Trouble
 
 ### Wrapper Script
 ```
-/path/to/lhdc-build/run-lhdc-env.sh
+$HOME/lhdc-build/run-lhdc-env.sh
 ```
 (Always use this for all custom tools)
 
@@ -237,19 +237,19 @@ For more issues, see **[LHDC_TESTING_GUIDE.md](LHDC_TESTING_GUIDE.md) § Trouble
 
 1. **Create an alias for easier access**:
    ```bash
-   echo "alias pw='bash /path/to/lhdc-build/run-lhdc-env.sh /lhdc-install/bin'" >> ~/.bashrc
+   echo "alias pw='bash $HOME/lhdc-build/run-lhdc-env.sh $HOME/lhdc-install/bin'" >> ~/.bashrc
    source ~/.bashrc
    # Now just: pw pw-cli info core
    ```
 
 2. **Monitor performance with pw-top**:
    ```bash
-   bash run-lhdc-env.sh /lhdc-install/bin/pw-top
+   bash run-lhdc-env.sh $HOME/lhdc-install/bin/pw-top
    ```
 
 3. **Dump full state for debugging**:
    ```bash
-   bash run-lhdc-env.sh /lhdc-install/bin/pw-dump > pw-state.json
+   bash run-lhdc-env.sh $HOME/lhdc-install/bin/pw-dump > pw-state.json
    ```
 
 4. **Keep isolation separate from system**:

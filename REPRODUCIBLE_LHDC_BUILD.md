@@ -7,15 +7,15 @@ first attempts and the fixes that made the final test work.
 ## Result
 
 - Device: realme Buds Air6
-- Bluetooth address used during testing: `AA:BB:CC:DD:EE:FF`
+- Bluetooth address: set `LHDC_DEVICE_ADDRESS` for your own device
 - Host: Linux Mint/Ubuntu 24.04 base
 - System PipeWire: 1.0.5
 - System WirePlumber: 0.4.17
 - BlueZ: 5.72
-- Adapter: Intel AX201
+- Adapter: your Bluetooth adapter
 - Custom PipeWire: 1.7.0
 - Custom WirePlumber: 0.5.19
-- Custom install prefix: `/lhdc-install`
+- Custom install prefix: `$HOME/lhdc-install`
 - Negotiated codec: `lhdc_v5`
 - Audio mode: stereo A2DP, two channels
 
@@ -71,7 +71,7 @@ The stock PipeWire/WirePlumber packages exposed common codecs such as SBC and
 LDAC, but not the required LHDC encoder and SPA codec plugin.
 
 **Fix:** build a separate PipeWire stack and install it under
-`/lhdc-install` instead of replacing system packages.
+`$HOME/lhdc-install` instead of replacing system packages.
 
 ### 2. Android support did not automatically transfer to Linux
 
@@ -118,11 +118,11 @@ This meant the custom PipeWire could load incompatible system components.
 plugins, SPA data, PipeWire modules, PipeWire configuration, and binaries:
 
 ```bash
-LD_LIBRARY_PATH=/lhdc-install/lib
-SPA_PLUGIN_DIR=/lhdc-install/lib/spa-0.2
-SPA_DATA_DIR=/lhdc-install/share/spa-0.2
-PIPEWIRE_MODULE_DIR=/lhdc-install/lib/pipewire-0.3
-PIPEWIRE_CONFIG_DIR=/lhdc-install/share/pipewire
+LD_LIBRARY_PATH=$HOME/lhdc-install/lib
+SPA_PLUGIN_DIR=$HOME/lhdc-install/lib/spa-0.2
+SPA_DATA_DIR=$HOME/lhdc-install/share/spa-0.2
+PIPEWIRE_MODULE_DIR=$HOME/lhdc-install/lib/pipewire-0.3
+PIPEWIRE_CONFIG_DIR=$HOME/lhdc-install/share/pipewire
 ```
 
 ### 5. WirePlumber selected the system 0.4 configuration
@@ -133,9 +133,9 @@ The custom WirePlumber 0.5 binary initially tried to read
 **Fix:** export all custom WirePlumber paths before launching it:
 
 ```bash
-WIREPLUMBER_MODULE_DIR=/lhdc-install/lib/wireplumber-0.5
-WIREPLUMBER_CONFIG_DIR=/lhdc-install/share/wireplumber
-WIREPLUMBER_DATA_DIR=/lhdc-install/share/wireplumber
+WIREPLUMBER_MODULE_DIR=$HOME/lhdc-install/lib/wireplumber-0.5
+WIREPLUMBER_CONFIG_DIR=$HOME/lhdc-install/share/wireplumber
+WIREPLUMBER_DATA_DIR=$HOME/lhdc-install/share/wireplumber
 ```
 
 ### 6. The system daemon continued owning Bluetooth profiles
@@ -157,7 +157,7 @@ Multiple sound server instances ... are probably trying to use Bluetooth audio
 briefly, then start the isolated stack:
 
 ```bash
-bluetoothctl disconnect AA:BB:CC:DD:EE:FF
+bluetoothctl disconnect "$LHDC_DEVICE_ADDRESS"
 systemctl --user stop wireplumber pipewire-pulse pipewire \
   pipewire-pulse.socket pipewire.socket
 sleep 3
@@ -180,19 +180,19 @@ The exact Meson options can vary with source revisions, but the build must
 produce the following artifacts:
 
 ```text
-/lhdc-install/bin/pipewire
-/lhdc-install/bin/wireplumber
-/lhdc-install/bin/pw-dump
-/lhdc-install/lib/liblhdcv5.so
-/lhdc-install/lib/spa-0.2/bluez5/libspa-codec-bluez5-lhdc.so
-/lhdc-install/lib/spa-0.2/bluez5/libspa-codec-bluez5-lhdc-v3.so
-/lhdc-install/share/wireplumber/wireplumber.conf.d/10-lhdc.conf
+$HOME/lhdc-install/bin/pipewire
+$HOME/lhdc-install/bin/wireplumber
+$HOME/lhdc-install/bin/pw-dump
+$HOME/lhdc-install/lib/liblhdcv5.so
+$HOME/lhdc-install/lib/spa-0.2/bluez5/libspa-codec-bluez5-lhdc.so
+$HOME/lhdc-install/lib/spa-0.2/bluez5/libspa-codec-bluez5-lhdc-v3.so
+$HOME/lhdc-install/share/wireplumber/wireplumber.conf.d/10-lhdc.conf
 ```
 
 Build the v3 encoder and run its tests before installing it:
 
 ```bash
-cd /path/to/lhdc-build/liblhdcv3
+cd $HOME/lhdc-build/liblhdcv3
 make
 # Expected: 66 unit tests and 6 round-trip tests pass
 ```
@@ -205,7 +205,7 @@ that prefix. Keep the system packages untouched.
 
 The version-controlled example is:
 
-[10-lhdc.conf](/path/to/lhdc-build/wireplumber/src/config/wireplumber.conf.d.examples/10-lhdc.conf)
+[10-lhdc.conf]($HOME/lhdc-build/wireplumber/src/config/wireplumber.conf.d.examples/10-lhdc.conf)
 
 The installed file must enable both codecs and use automatic quality:
 
@@ -222,7 +222,7 @@ LHDC v5 is the verified codec.
 The helper reads the negotiated live codec, not merely the installed library:
 
 ```bash
-cd /path/to/lhdc-build
+cd $HOME/lhdc-build
 ./lhdc-status.sh
 ./lhdc-status.sh --watch
 ./lhdc-status.sh --gui
@@ -242,12 +242,12 @@ Replace `RUNTIME` and `LOGDIR` as needed. Do not run this while the system
 PipeWire Bluetooth backend is active.
 
 ```bash
-PREFIX=/lhdc-install
+PREFIX=$HOME/lhdc-install
 RUNTIME=/tmp/lhdc-runtime-$(id -u)
 LOGDIR=/tmp/lhdc-logs-$(date +%s)
 mkdir -p "$RUNTIME" "$LOGDIR"
 
-bluetoothctl disconnect AA:BB:CC:DD:EE:FF || true
+bluetoothctl disconnect "$LHDC_DEVICE_ADDRESS" || true
 systemctl --user stop wireplumber pipewire-pulse pipewire \
   pipewire-pulse.socket pipewire.socket
 sleep 3
@@ -273,7 +273,7 @@ sleep 2
 WIREPLUMBER_PID=$!
 sleep 10
 
-bluetoothctl connect AA:BB:CC:DD:EE:FF
+bluetoothctl connect "$LHDC_DEVICE_ADDRESS"
 sleep 8
 
 ./lhdc-status.sh
@@ -300,7 +300,7 @@ Always clean up using numeric process IDs captured when starting the daemons:
 
 ```bash
 kill -TERM "$WIREPLUMBER_PID" "$PIPEWIRE_PID"
-bluetoothctl disconnect AA:BB:CC:DD:EE:FF || true
+bluetoothctl disconnect "$LHDC_DEVICE_ADDRESS" || true
 systemctl --user start pipewire pipewire-pulse wireplumber
 systemctl --user is-active pipewire pipewire-pulse wireplumber
 ```

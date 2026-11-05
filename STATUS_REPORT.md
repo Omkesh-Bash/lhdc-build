@@ -7,17 +7,17 @@
 ## Current default integration
 
 The user-level systemd overrides are active. PipeWire 1.7.0, PipeWire Pulse,
-and WirePlumber 0.5.19 start automatically using `/lhdc-install`.
+and WirePlumber 0.5.19 start automatically using `$HOME/lhdc-install`.
 The configuration persists after reboot and Buds reconnects. Verify with:
 
 ```bash
-/path/to/lhdc-build/lhdc-control.sh --status
+$HOME/lhdc-build/lhdc-control.sh --status
 ```
 
 The distribution-managed system files remain untouched. Roll back with:
 
 ```bash
-/path/to/lhdc-build/lhdc-control.sh --disable
+$HOME/lhdc-build/lhdc-control.sh --disable
 ```
 
 ---
@@ -26,18 +26,18 @@ The distribution-managed system files remain untouched. Roll back with:
 
 | Phase | Component | Status | Details |
 |-------|-----------|--------|---------|
-| **Library** | liblhdcv5 | ✅ Built | `/lhdc-install/lib/liblhdcv5.so` |
-| **Codec Plugin** | LHDC Bluetooth | ✅ Compiled | `/lhdc-install/lib/spa-0.2/bluez5/libspa-codec-bluez5-lhdc.so` |
-| **Core** | PipeWire Daemon | ✅ Ready | `/lhdc-install/bin/pipewire` v1.7.0 |
+| **Library** | liblhdcv5 | ✅ Built | `$HOME/lhdc-install/lib/liblhdcv5.so` |
+| **Codec Plugin** | LHDC Bluetooth | ✅ Compiled | `$HOME/lhdc-install/lib/spa-0.2/bluez5/libspa-codec-bluez5-lhdc.so` |
+| **Core** | PipeWire Daemon | ✅ Ready | `$HOME/lhdc-install/bin/pipewire` v1.7.0 |
 | **Tools** | pw-cli, pw-dump, pw-top, etc. | ✅ Available | All CLI tools installed and functional |
-| **Environment** | Wrapper Script | ✅ Active | `/path/to/lhdc-build/run-lhdc-env.sh` |
+| **Environment** | Wrapper Script | ✅ Active | `$HOME/lhdc-build/run-lhdc-env.sh` |
 
 ---
 
 ## ✅ Verification Tests Passed
 
 ```
-✅ Library link:      liblhdcv5.so → /lhdc-install/lib/liblhdcv5.so
+✅ Library link:      liblhdcv5.so → $HOME/lhdc-install/lib/liblhdcv5.so
 ✅ Codec plugin:      libspa-codec-bluez5-lhdc.so compiled and available
 ✅ BlueZ5 plugin:     libspa-bluez5.so loads (factories detected)
 ✅ Custom binary:     pipewire --version reports v1.7.0
@@ -51,9 +51,9 @@ The distribution-managed system files remain untouched. Roll back with:
 
 ### Test LHDC Codec Immediately
 ```bash
-cd /path/to/lhdc-build
-bash run-lhdc-env.sh ldd /lhdc-install/lib/spa-0.2/bluez5/libspa-codec-bluez5-lhdc.so
-# Shows: liblhdcv5.so => /lhdc-install/lib/liblhdcv5.so
+cd $HOME/lhdc-build
+bash run-lhdc-env.sh ldd $HOME/lhdc-install/lib/spa-0.2/bluez5/libspa-codec-bluez5-lhdc.so
+# Shows: liblhdcv5.so => $HOME/lhdc-install/lib/liblhdcv5.so
 ```
 
 ### Run Isolated PipeWire Test
@@ -62,7 +62,7 @@ CUSTOM_RUNTIME_DIR="/tmp/lhdc-pw-test-$$"
 mkdir -p "$CUSTOM_RUNTIME_DIR"
 export XDG_RUNTIME_DIR="$CUSTOM_RUNTIME_DIR"
 
-bash run-lhdc-env.sh /lhdc-install/bin/pipewire &
+bash run-lhdc-env.sh $HOME/lhdc-install/bin/pipewire &
 sleep 2
 
 # Test here
@@ -76,7 +76,7 @@ rm -rf "$CUSTOM_RUNTIME_DIR"
 ## 📁 Project Structure
 
 ```
-/path/to/lhdc-build/
+$HOME/lhdc-build/
 ├── liblhdcv5/                          # LHDC library source
 ├── pipewire/                           # PipeWire source (GitHub)
 ├── run-lhdc-env.sh                     # ✨ Environment wrapper
@@ -85,7 +85,7 @@ rm -rf "$CUSTOM_RUNTIME_DIR"
 ├── QUICK_REFERENCE.md                 # Command cheat sheet
 ├── STATUS_REPORT.md                   # This file
 
-/lhdc-install/             # 🎯 LOCAL INSTALLATION PREFIX
+$HOME/lhdc-install/             # 🎯 LOCAL INSTALLATION PREFIX
 ├── bin/
 │   ├── pipewire                        # Custom PipeWire daemon
 │   ├── pw-cli                          # CLI tool
@@ -143,14 +143,14 @@ rm -rf "$CUSTOM_RUNTIME_DIR"
 
 ### Path 1: User-level default (ACTIVE)
 ```bash
-/path/to/lhdc-build/lhdc-control.sh --status
+$HOME/lhdc-build/lhdc-control.sh --status
 ```
 
 The user-level systemd drop-ins persist across reboot. Browser audio uses the
 custom PipeWire Pulse bridge, and the Buds currently negotiate LHDC v5.
 
 ```bash
-/path/to/lhdc-build/lhdc-control.sh --disable
+$HOME/lhdc-build/lhdc-control.sh --disable
 ```
 
 ### Path 3: Bluetooth-Only Override
@@ -168,7 +168,7 @@ custom PipeWire Pulse bridge, and the Buds currently negotiate LHDC v5.
 
 ### 2. **Performance Monitoring**
    ```bash
-   bash run-lhdc-env.sh /lhdc-install/bin/pw-top
+   bash run-lhdc-env.sh $HOME/lhdc-install/bin/pw-top
    ```
 
 ### 3. **Audio Quality Verification**
@@ -197,8 +197,8 @@ custom PipeWire Pulse bridge, and the Buds currently negotiate LHDC v5.
 
 1. **Always use the wrapper script**:
    ```bash
-   ✅ bash run-lhdc-env.sh /lhdc-install/bin/pw-cli
-   ❌ /lhdc-install/bin/pw-cli  # Will fail
+   ✅ bash run-lhdc-env.sh $HOME/lhdc-install/bin/pw-cli
+   ❌ $HOME/lhdc-install/bin/pw-cli  # Will fail
    ```
 
 2. **Don't use sudo with ninja install**:

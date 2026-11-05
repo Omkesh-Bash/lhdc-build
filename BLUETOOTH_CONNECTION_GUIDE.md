@@ -25,7 +25,7 @@
 
 ### Step 2: Run Auto-Pair Script
 ```bash
-cd /path/to/lhdc-build
+cd $HOME/lhdc-build
 
 # Run the connection script
 bash connect-bluetooth-headphones.sh realme
@@ -42,7 +42,7 @@ bluetoothctl info AA:BB:CC:DD:EE:FF | grep -E "Connected|Name|Class"
 # Monitor with PipeWire top
 CUSTOM_RUNTIME_DIR="/tmp/lhdc-pw-25284"
 export XDG_RUNTIME_DIR="$CUSTOM_RUNTIME_DIR"
-bash run-lhdc-env.sh /lhdc-install/bin/pw-top
+bash run-lhdc-env.sh $HOME/lhdc-install/bin/pw-top
 ```
 
 ---
@@ -140,13 +140,13 @@ And the audio stream should negotiate **LHDC codec** for high-quality Bluetooth 
 ps aux | grep pipewire | grep -v grep
 
 # Monitor audio streams
-bash run-lhdc-env.sh /lhdc-install/bin/pw-top
+bash run-lhdc-env.sh $HOME/lhdc-install/bin/pw-top
 
 # See all nodes
-bash run-lhdc-env.sh /lhdc-install/bin/pw-dump
+bash run-lhdc-env.sh $HOME/lhdc-install/bin/pw-dump
 
 # Check codec being used
-bash run-lhdc-env.sh /lhdc-install/bin/pw-cli info all | grep lhdc
+bash run-lhdc-env.sh $HOME/lhdc-install/bin/pw-cli info all | grep lhdc
 
 # Restart headphones connection
 bluetoothctl disconnect AA:BB:CC:DD:EE:FF

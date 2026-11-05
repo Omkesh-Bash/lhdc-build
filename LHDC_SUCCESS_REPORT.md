@@ -39,7 +39,7 @@ Your LHDC v5 codec support for PipeWire on Linux Mint 22.3 is **fully operationa
 
 ### Installation Directory
 ```
-/lhdc-install/
+$HOME/lhdc-install/
 ├── bin/pipewire
 ├── lib/
 │   ├── liblhdcv5.so ⭐ LHDC library
@@ -113,7 +113,7 @@ source /etc/profile.d/lhdc-pipewire.sh
 Use the provided wrapper for isolated testing:
 
 ```bash
-bash /path/to/lhdc-build/run-lhdc-env.sh /usr/bin/pipewire
+bash $HOME/lhdc-build/run-lhdc-env.sh /usr/bin/pipewire
 ```
 
 ---
@@ -140,7 +140,7 @@ bash /path/to/lhdc-build/run-lhdc-env.sh /usr/bin/pipewire
 - No special commands needed
 
 ### For Future Upgrades
-- Keep `/lhdc-install` backed up
+- Keep `$HOME/lhdc-install` backed up
 - Document any configuration changes
 - Update PipeWire when new versions available
 
@@ -172,7 +172,7 @@ Before considering the setup complete, verify:
 /tmp/lhdc-audio-test.sh
 
 # Check codec plugins
-ls -lh /lhdc-install/lib/spa-0.2/bluez5/
+ls -lh $HOME/lhdc-install/lib/spa-0.2/bluez5/
 
 # Restart audio system
 systemctl --user restart pipewire wireplumber
@@ -182,8 +182,8 @@ systemctl --user status pipewire
 ```
 
 ### Key Paths
-- Installation: `/lhdc-install/`
-- Build source: `/path/to/lhdc-build/`
+- Installation: `$HOME/lhdc-install/`
+- Build source: `$HOME/lhdc-build/`
 - Backup: `~/pipewire-backup-system/pipewire.original`
 
 ---

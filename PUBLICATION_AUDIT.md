@@ -38,21 +38,16 @@ original scripts and documentation. Before making it public, either:
 
 Do not add a license to third-party source as though you authored it.
 
-## Sensitive information found
+## Sensitive information review
 
 No passwords, access tokens, private keys, or common cloud-secret patterns
 were found in the tracked root files.
 
-The following personal or machine-specific information is present and should
-be removed or generalized before a public release:
+The public-facing files now use placeholders instead of the author's real
+Bluetooth address and home path:
 
-- A real Bluetooth device address in `lhdc-control.sh` and documentation.
-- The username and absolute home paths `/home/omkesh/...`.
-- Host and distribution details such as `your-linux-host` and hardware identifiers.
-- Local dates, runtime directories, and machine-specific test output.
-
-The Bluetooth address is not an authentication secret, but it is a persistent
-device identifier and should not be published unnecessarily.
+- `$HOME`, `AA:BB:CC:DD:EE:FF`, and `/tmp` test directories are intentional
+  generic examples, not credentials or personal identifiers.
 
 Recommended public replacements:
 
@@ -90,9 +85,8 @@ backup and understanding the impact on existing clones.
 
 ## Recommendation
 
-The repository is technically close to publishable because the root repo
-does not contain credentials and does not vendor the nested source trees.
-However, do not make it public unchanged: first generalize the MAC address
-and personal paths, add a clear license for your original scripts/docs, and
-confirm that any LHDC source you plan to publish is covered by the stated
-Apache/BSD notices and not a proprietary vendor implementation.
+The root repository is suitable for a small public side-project release:
+credentials are absent, personal defaults are generalized, and the original
+scripts/docs now have an MIT license. Before publishing any nested LHDC source
+or binaries, separately confirm its upstream license and that it is not a
+proprietary vendor implementation.

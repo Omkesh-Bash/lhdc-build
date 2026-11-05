@@ -8,13 +8,13 @@ remain untouched.
 
 ```bash
 # Check the live negotiated codec
-/path/to/lhdc-build/lhdc-control.sh --status
+$HOME/lhdc-build/lhdc-control.sh --status
 
 # Open the GUI control
-/path/to/lhdc-build/lhdc-control.sh --gui
+$HOME/lhdc-build/lhdc-control.sh --gui
 
 # Restore the distribution PipeWire/WirePlumber stack
-/path/to/lhdc-build/lhdc-control.sh --disable
+$HOME/lhdc-build/lhdc-control.sh --disable
 ```
 
 Expected status:
@@ -28,21 +28,21 @@ Profile: a2dp-sink
 
 ### Run Custom PipeWire Tools
 ```bash
-cd /path/to/lhdc-build
-bash run-lhdc-env.sh /lhdc-install/bin/<command>
+cd $HOME/lhdc-build
+bash run-lhdc-env.sh $HOME/lhdc-install/bin/<command>
 ```
 
 ### Verify Codec
 ```bash
 bash run-lhdc-env.sh \
-  /lhdc-install/bin/spa-inspect \
-  /lhdc-install/lib/spa-0.2/bluez5/libspa-bluez5.so
+  $HOME/lhdc-install/bin/spa-inspect \
+  $HOME/lhdc-install/lib/spa-0.2/bluez5/libspa-bluez5.so
 ```
 
 ### Check Library Links
 ```bash
 bash run-lhdc-env.sh ldd \
-  /lhdc-install/lib/spa-0.2/bluez5/libspa-codec-bluez5-lhdc.so
+  $HOME/lhdc-install/lib/spa-0.2/bluez5/libspa-codec-bluez5-lhdc.so
 ```
 
 ### Start Isolated Test (advanced)
@@ -51,7 +51,7 @@ CUSTOM_RUNTIME_DIR="/tmp/lhdc-pw-test-$$"
 mkdir -p "$CUSTOM_RUNTIME_DIR"
 export XDG_RUNTIME_DIR="$CUSTOM_RUNTIME_DIR"
 
-bash run-lhdc-env.sh /lhdc-install/bin/pipewire &
+bash run-lhdc-env.sh $HOME/lhdc-install/bin/pipewire &
 
 # Test commands here
 
@@ -61,22 +61,22 @@ rm -rf "$CUSTOM_RUNTIME_DIR"
 
 ### Check PipeWire Status
 ```bash
-bash run-lhdc-env.sh /lhdc-install/bin/pw-cli info core
+bash run-lhdc-env.sh $HOME/lhdc-install/bin/pw-cli info core
 ```
 
 ### Dump All Nodes (Bluetooth Devices, etc.)
 ```bash
-bash run-lhdc-env.sh /lhdc-install/bin/pw-dump
+bash run-lhdc-env.sh $HOME/lhdc-install/bin/pw-dump
 ```
 
 ### Monitor Performance
 ```bash
-bash run-lhdc-env.sh /lhdc-install/bin/pw-top
+bash run-lhdc-env.sh $HOME/lhdc-install/bin/pw-top
 ```
 
 ### List Audio Profiles
 ```bash
-bash run-lhdc-env.sh /lhdc-install/bin/pw-cli list Profile
+bash run-lhdc-env.sh $HOME/lhdc-install/bin/pw-cli list Profile
 ```
 
 ---
@@ -109,7 +109,7 @@ systemctl --user is-active pipewire pipewire-pulse wireplumber
 
 ## 📊 Installation Summary
 ```
-Local Prefix:           /lhdc-install
+Local Prefix:           $HOME/lhdc-install
 LHDC Library:           lib/liblhdcv5.so
 Codec Plugin:           lib/spa-0.2/bluez5/libspa-codec-bluez5-lhdc.so
 Custom PipeWire Binary: bin/pipewire
@@ -121,7 +121,7 @@ Environment Wrapper:    run-lhdc-env.sh
 ## ⚠️ Rollback (If Needed)
 ```bash
 # Remove user-level overrides and return to distribution binaries
-/path/to/lhdc-build/lhdc-control.sh --disable
+$HOME/lhdc-build/lhdc-control.sh --disable
 ```
 
 ---

@@ -12,7 +12,7 @@ cd pipewire
 ### Clone/Build liblhdcv5
 ```bash
 # If not already present, clone or build liblhdcv5
-# (In your workspace, it's already built in /lhdc-install)
+# (In your workspace, it's already built in $HOME/lhdc-install)
 git clone https://github.com/usbmuxd/liblhdc  # or your preferred source
 cd liblhdc
 # Follow specific LHDC build instructions (may require AOSP/NDK setup)
@@ -25,10 +25,10 @@ cd liblhdc
 ```bash
 # Your liblhdcv5.so must be in a location pkg-config can find
 # Verify it's present:
-ls -lah /lhdc-install/lib/liblhdcv5.so
+ls -lah $HOME/lhdc-install/lib/liblhdcv5.so
 
 # Verify pkg-config can find it:
-export PKG_CONFIG_PATH="/lhdc-install/lib/pkgconfig:$PKG_CONFIG_PATH"
+export PKG_CONFIG_PATH="$HOME/lhdc-install/lib/pkgconfig:$PKG_CONFIG_PATH"
 pkg-config --modversion lhdcv5
 # Expected output: something like "1.0"
 ```
@@ -89,7 +89,7 @@ ninja -j2
 ninja install
 
 # Verify installation
-ls -lah /lhdc-install/lib/spa-0.2/bluez5/libspa-codec-bluez5-lhdc.so
+ls -lah $HOME/lhdc-install/lib/spa-0.2/bluez5/libspa-codec-bluez5-lhdc.so
 ```
 
 ---
@@ -129,7 +129,7 @@ chmod +x run-lhdc-env.sh
 ./run-lhdc-env.sh ldd $HOME/lhdc-install/lib/spa-0.2/bluez5/libspa-codec-bluez5-lhdc.so
 
 # Expected output includes:
-# liblhdcv5.so => /lhdc-install/lib/liblhdcv5.so (0x...)
+# liblhdcv5.so => $HOME/lhdc-install/lib/liblhdcv5.so (0x...)
 ```
 
 ---
@@ -169,7 +169,7 @@ rm -rf "$CUSTOM_RUNTIME_DIR"
 - **Cause**: liblhdcv5 not installed to local prefix
 - **Fix**:
   ```bash
-  export PKG_CONFIG_PATH="/lhdc-install/lib/pkgconfig:$PKG_CONFIG_PATH"
+  export PKG_CONFIG_PATH="$HOME/lhdc-install/lib/pkgconfig:$PKG_CONFIG_PATH"
   pkg-config --cflags --libs lhdcv5  # Should print paths
   ```
 
@@ -191,8 +191,8 @@ rm -rf "$CUSTOM_RUNTIME_DIR"
 - **Cause**: LD_LIBRARY_PATH not set when running tools
 - **Fix**: Always use the wrapper:
   ```bash
-  ./run-lhdc-env.sh /lhdc-install/bin/<command>
-  # NOT: /lhdc-install/bin/<command>  # This will fail
+  ./run-lhdc-env.sh $HOME/lhdc-install/bin/<command>
+  # NOT: $HOME/lhdc-install/bin/<command>  # This will fail
   ```
 
 ---

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-DEVICE_ADDRESS="${LHDC_DEVICE_ADDRESS:-AA:BB:CC:DD:EE:FF}"
+DEVICE_ADDRESS="${LHDC_DEVICE_ADDRESS:-}"
 WATCH=false
 GUI=false
 
@@ -29,7 +29,8 @@ print_status() {
   rows="$(printf '%s' "$dump" | perl -0777 -ne '
     while (/"info"\s*:\s*\{(.*?)\n\s*\}\s*,\s*"params"/sg) {
       my $info = $1;
-      next unless $info =~ /"api\.bluez5\.address"\s*:\s*"'$DEVICE_ADDRESS'"/;
+      next if "'$DEVICE_ADDRESS'" ne "" &&
+        $info !~ /"api\.bluez5\.address"\s*:\s*"'$DEVICE_ADDRESS'"/;
       next unless $info =~ /"api\.bluez5\.codec"\s*:\s*"([^"]+)"/;
       my $codec = $1;
       my ($profile) = $info =~ /"api\.bluez5\.profile"\s*:\s*"([^"]+)"/;
@@ -40,7 +41,8 @@ print_status() {
   ' | head -1)"
 
   if [[ -z "$rows" ]]; then
-    printf 'No active Bluetooth audio codec found for %s.\n' "$DEVICE_ADDRESS"
+    printf 'No active Bluetooth audio codec found%s.\n' \
+      "${DEVICE_ADDRESS:+ for $DEVICE_ADDRESS}"
     return 0
   fi
 
@@ -48,7 +50,7 @@ print_status() {
   IFS=$'\t' read -r codec profile node <<<"$rows"
   local label="${codec//_/ }"
   printf 'Device: %s\nCodec: %s\nProfile: %s\nNode: %s\n' \
-    "$DEVICE_ADDRESS" "$label" "$profile" "$node"
+    "${DEVICE_ADDRESS:-auto-detected Bluetooth device}" "$label" "$profile" "$node"
 
   if [[ "$GUI" == true ]]; then
     zenity --info --title="Bluetooth audio codec" \
